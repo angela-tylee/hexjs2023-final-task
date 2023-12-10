@@ -1,13 +1,16 @@
 let orderData = [];
 const orderList = document.querySelector(".js-orderList");
 
+let chart1 = renderC3_lv1();
+let chart2 = renderC3_lv2();
+
 function init(){
     getOrderList();
-    renderC3_lv2();
 }
 
 init();
 
+// 取訂單資訊
 function getOrderList(){
     axios.get(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`,{
         headers:{
@@ -58,6 +61,7 @@ function getOrderList(){
     })
 }
 
+// 點擊按鈕，刪除單筆訂單
 orderList.addEventListener("click", function(e){
     e.preventDefault();
     const targetClass = e.target.getAttribute("class");
@@ -73,6 +77,7 @@ orderList.addEventListener("click", function(e){
     }
 })
 
+// 更改訂單狀態
 function changeOrderStatus(status, id){
     console.log(status,id);
     let newStatus;
@@ -95,6 +100,8 @@ function changeOrderStatus(status, id){
     .then(function(response){
         alert("修改訂單成功")
         getOrderList();
+        renderC3_lv1();
+        renderC3_lv2();
     })
 }
 
@@ -109,6 +116,8 @@ function deleteOrderItem(id){
     .then(function(response){
         alert("刪除該筆訂單成功");
         getOrderList();
+        renderC3_lv1();
+        renderC3_lv2();
     })
 }
 
@@ -125,49 +134,57 @@ discardAllBtn.addEventListener("click",function(e){
     .then(function(response){
         alert("刪除全部訂單成功！");
         getOrderList();
+        renderC3_lv1();
+        renderC3_lv2();
     })
     .catch(function(response){
         alert("訂單已經清空，請勿重複點擊");
     })
 })
 
-
-//圖表
-function renderC3(){
-    console.log(orderData);
-    let total = {};
+// 圖表 LV1：做圓餅圖，做全產品類別營收比重，類別含三項，共有：床架、收納、窗簾
+function renderC3_lv1() {
+    let obj = {};
     orderData.forEach(function(item){
         item.products.forEach(function(productItem){
-            if(total[productItem.category]==undefined){
-                total[productItem.category] = productItem.price * productItem.quantity;
+            if (obj[productItem.category] === undefined){
+                obj[productItem.category] = productItem.quantity * productItem.price;
             } else {
-
+                obj[productItem.category] += productItem.quantity * productItem.price;
             }
         })
-    })
-    // C3.js
+    });
+    console.log(obj);
+
+    let originAry = Object.keys(obj);
+    console.log(originAry);
+
+    let categoryRankAry = [];
+
+    originAry.forEach(function(item){
+        let ary = [];
+        ary.push(item);
+        ary.push(obj[item]);
+        categoryRankAry.push(ary);
+    });
+
+    console.log(categoryRankAry);
+
     let chart = c3.generate({
-        bindto: '#chart', // HTML 元素綁定
+        bindto: '#chart-1', 
         data: {
             type: "pie",
-            columns: [
-            ['Louvre 雙人床架', 1],
-            ['Antony 雙人床架', 2],
-            ['Anty 雙人床架', 3],
-            ['其他', 4],
-            ],
-            colors:{
-                "Louvre 雙人床架":"#DACBFF",
-                "Antony 雙人床架":"#9D7FEA",
-                "Anty 雙人床架": "#5434A7",
-                "其他": "#301E5F",
-            }
+            columns: categoryRankAry,
+        },
+        colors:{
+            pattern: ["#DACBFF","#9D7FEA","#5434A7","#301E5F"]
         },
     });
 }
 
-// renderC3();
 
+
+// 圖表 LV2：做圓餅圖，做全品項營收比重，類別含四項，篩選出前三名營收品項，其他 4~8 名都統整為「其它」
 function renderC3_lv2() {
     let obj = {};
     orderData.forEach(function(item){
@@ -184,38 +201,37 @@ function renderC3_lv2() {
     let originAry = Object.keys(obj);
     console.log(originAry);
 
-    let rankSortAry = [];
+    let itemRankAry = [];
 
     originAry.forEach(function(item){
         let ary = [];
         ary.push(item);
         ary.push(obj[item]);
-        rankSortAry.push(ary);
+        itemRankAry.push(ary);
     });
 
-    console.log(rankSortAry);
+    console.log(itemRankAry);
 
-    rankSortAry.sort(function (a,b){
+    itemRankAry.sort(function (a,b){
         return b[1] - a[1];
     })
 
-    // 超過4筆，統整為其他
-    if (rankSortAry.length > 3){
+    if (itemRankAry.length > 3){
         let otherTotal = 0;
-        rankSortAry.forEach(function (item, index){
+        itemRankAry.forEach(function (item, index){
             if (index > 2){
-                otherTotal += rankSortAry[index][1];
+                otherTotal += itemRankAry[index][1];
             }
         })
-        rankSortAry.splice(3, rankSortAry.length - 1);
-        rankSortAry.push(['其他', otherTotal]);
+        itemRankAry.splice(3, itemRankAry.length - 1);
+        itemRankAry.push(['其他', otherTotal]);
     }
 
-    c3.generate({
-        bindto: '#chart', 
+    let chart = c3.generate({
+        bindto: '#chart-2', 
         data: {
             type: "pie",
-            columns: rankSortAry,
+            columns: itemRankAry,
         },
         colors:{
             pattern: ["#DACBFF","#9D7FEA","#5434A7","#301E5F"]
@@ -223,4 +239,5 @@ function renderC3_lv2() {
     });
 }
 
-
+renderC3_lv1();
+renderC3_lv2();
