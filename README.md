@@ -1,8 +1,8 @@
 # HexSchool JavaScript 2023 Final Task
 
 ## Pages
-- Homepage: https://angela-tylee.github.io/hexjs2023-final-task/#bedAdvantage/#admin.html
-- Dashboard: https://angela-tylee.github.io/hexjs2023-final-task/admin.html
+- Homepage: https://angela-tylee.github.io/hexjs2023-final-task/
+- Admin Dashboard: https://angela-tylee.github.io/hexjs2023-final-task/admin.html
 
 ## Built with
 HTML, CSS, JavaScript
