@@ -3,6 +3,7 @@ const orderList = document.querySelector(".js-orderList");
 
 function init(){
     getOrderList();
+    renderC3_lv2();
 }
 
 init();
@@ -17,6 +18,9 @@ function getOrderList(){
         orderData = response.data.orders;
         let str = '';
         orderData.forEach(function(item){
+            // 調整時間格式
+            const timeStamp = new Date(item.createdAt*1000);
+            const orderTime = `${timeStamp.getFullYear()}/${timeStamp.getMonth()+1}/${timeStamp.getDate()}`;
             // 組產品字串
             let productStr = "";
             item.products.forEach(function(productItem){
@@ -31,21 +35,21 @@ function getOrderList(){
             orderStatus="未處理"
         }
             str += `<tr>
-                <td>${item.id}</td>
-                <td>
+                <td style="width: 15%">${item.id}</td>
+                <td style="width: 10%">
                     <p>${item.user.name}</p>
                     <p>${item.user.tel}</p>
                 </td>
-                <td>${item.user.address}</td>
-                <td>${item.user.email}</td>
-                <td>
+                <td style="width: 15%">${item.user.address}</td>
+                <td style="width: 15%">${item.user.email}</td>
+                <td style="width: 20%">
                     <p>${productStr}</p>
                 </td>
-                <td>${item.createdAt}</td>
-                <td class="js-orderStatus">
+                <td style="width: 10%">${orderTime}</td>
+                <td style="width: 10%" class="js-orderStatus">
                     <a href="#" data-status="false" class="orderStatus"  data-id="${item.id}">${orderStatus}</a>
                 </td>
-                <td>
+                <td style="width: 5%">
                     <input type="button" class="delSingleOrder-Btn js-orderDelete" data-id="${item.id}" value="刪除">
                 </td>
             </tr>`
@@ -94,6 +98,7 @@ function changeOrderStatus(status, id){
     })
 }
 
+// 刪除單筆訂單
 function deleteOrderItem(id){
     axios.delete(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders/${id}`,
     {
@@ -107,10 +112,29 @@ function deleteOrderItem(id){
     })
 }
 
-// 圖表
+// 刪除所有訂單
+const discardAllBtn = document.querySelector(".discardAllBtn");
+discardAllBtn.addEventListener("click",function(e){
+    e.preventDefault();
+    axios.delete(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`,
+    {
+        headers:{
+            'Authorization': token,
+        }
+    })
+    .then(function(response){
+        alert("刪除全部訂單成功！");
+        getOrderList();
+    })
+    .catch(function(response){
+        alert("訂單已經清空，請勿重複點擊");
+    })
+})
+
+
+//圖表
 function renderC3(){
     console.log(orderData);
-    // 物件資料搜集
     let total = {};
     orderData.forEach(function(item){
         item.products.forEach(function(productItem){
@@ -141,7 +165,8 @@ function renderC3(){
         },
     });
 }
-renderC3();
+
+// renderC3();
 
 function renderC3_lv2() {
     let obj = {};
@@ -187,7 +212,7 @@ function renderC3_lv2() {
     }
 
     c3.generate({
-        bindto: '#chart', // HTML 元素綁定
+        bindto: '#chart', 
         data: {
             type: "pie",
             columns: rankSortAry,
@@ -198,4 +223,4 @@ function renderC3_lv2() {
     });
 }
 
-renderC3_lv2();
+
