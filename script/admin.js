@@ -1,11 +1,10 @@
 let orderData = [];
 const orderList = document.querySelector(".js-orderList");
 
-let chart1 = renderC3_lv1();
-let chart2 = renderC3_lv2();
-
 function init(){
     getOrderList();
+    renderC3_lv1();
+    renderC3_lv2();
 }
 
 init();
@@ -181,7 +180,6 @@ function renderC3_lv1() {
         },
     });
 }
-
 
 
 // 圖表 LV2：做圓餅圖，做全品項營收比重，類別含四項，篩選出前三名營收品項，其他 4~8 名都統整為「其它」

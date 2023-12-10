@@ -1,5 +1,3 @@
-<!-- 預設 JS，請同學不要修改此處 -->
-
 document.addEventListener('DOMContentLoaded', function() {
     const ele = document.querySelector('.recommendation-wall');
     ele.style.cursor = 'grab';
