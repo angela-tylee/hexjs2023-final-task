@@ -13,6 +13,6 @@ HTML, CSS, JavaScript
 - API request with axios
 
 ## Resources
-[六角學院](https://www.hexschool.com)
-[axios](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjemOXU7ISDAxVsh1YBHdd6BAAQFnoECBMQAQ&url=https%3A%2F%2Fgithub.com%2Faxios%2Faxios&usg=AOvVaw266wVW3XPRY46nOw2ULXdh&opi=89978449)
-[C3.js](https://c3js.org)
+- [六角學院](https://www.hexschool.com)
+- [axios](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjemOXU7ISDAxVsh1YBHdd6BAAQFnoECBMQAQ&url=https%3A%2F%2Fgithub.com%2Faxios%2Faxios&usg=AOvVaw266wVW3XPRY46nOw2ULXdh&opi=89978449)
+- [C3.js](https://c3js.org)
