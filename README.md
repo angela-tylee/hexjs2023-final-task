@@ -4,6 +4,8 @@
 - Homepage: https://angela-tylee.github.io/hexjs2023-final-task/
 - Admin Dashboard: https://angela-tylee.github.io/hexjs2023-final-task/admin.html
 
+<img width="613" alt="image" src="https://github.com/angela-tylee/hexjs2023-final-task/assets/145020731/88559634-ec57-441d-a647-f617c5293d82">
+
 ## Built with
 HTML, CSS, JavaScript
 
